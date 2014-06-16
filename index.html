@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <script src="jquery.js"></script>
+  	<script src="underscore.js"></script>
+  	<script src="backbone.js"></script>
+  </head>
+  <body>
+  	<script>
+  	  //First step: B!
+      //Ok, now it is your turn.  
+
+      //Here is what you start with.  You have a function that when you call it and give it a message, it will 'render' or draw the message onto the page using a template.  The template part of the function is the html that is the same for all messages.  Let's break this function down:
+      var renderSomethingOnThePage = function(message){
+        //we are going to be using jquery to append a message to the page, but we dont want all this HTML to be in the '.append' function call, so we break it out into a variable called $element first. Then we just call the '.append' method with that variable.  This also allows us to space out the html like you would expect to see it - a tree structure. 
+        var html = "<div>" +
+                     "<span>" + message + "</span>" +
+                   "</div>" +
+                   "<br/>";
+
+        //Question:  How would you modify the above template to add style to the look of the page?  Look below for an example (answer 1)
+
+        //here is the actual jquery call to append the html defined above to the body of the page.  For each time this function is called, the whole template defined above will be 'rendered' with the message you define in the function argument.
+        $('body').append(html);
+      };
+ 
+      //let's try it out!
+      renderSomethingOnThePage('this is an example for how to use the renderSomethingOnThePage method');
+
+      //Uncomment the lines below to see that calling the function above will render something to the page using the template defined in the function:
+
+      // renderSomethingOnThePage('Each additional message you put into this function will be a new message on the page');
+
+      //ok, let's revist what we learned from the last exercise.  We ar working with a different application this time - we are going to be working with messages received from some API (like phone messages received from twilio).
+
+      //Again, we extend a vanilla Backbone.Model to add extra stuff about our model.  vanilla Backbone.Model comes with all the methods that we will want to use later, so we just add the parts of the objects that we will want to interact with.  This one is a little different than the last time we extended the Backbone.Model though.  Last time, remember we didn't extend the vanilla Backbone.Model at all. We left it blank.  So, we will get to see what we might want to extend the model with.  (don't know what 'extend' means or does?  this is all that prototype stuff and inhertance.  Halp yourself a teacher to explain it if you are lost)
+  	  var Message = Backbone.Model.extend({  
+        //we have decided that our messages should have two methods that someone could call.  The first one (initialize) is actually some Backbone ju-ju that is specific to Backbone.  Remember how when you were using ajax, if you defined a 'success' function, you could depend on that function being called once the data comes back from the server?  Well if you define a function and call it 'initialize', backbone will call that function everytime you create a new model from whatever class the initialize function is defined on.  In this case, anytime you use 'new Message', the object/model created by that will have had the below initialize function run when the model is created.
+        initialize: function(){
+          //this is the code that will get run.  Notice that we are calling 'this.on()', this call is basically the same as the way we did it in the previous exercise, however, by putting it into the initialize function, we can be sure that all models that are created will have event listeners on them.
+
+          //OK, so now it is your turn to write a '.on' method call.  We want to make an event listener that will listen for a 'change' in this model.  We want to call the method we defined above ('renderSomethingOnThePage') and pass the message attribute on the model as an argument.  Give it a shot, or check out how the function was defined on the previous exercise.   
+          this.on(/* try adding an event handler here */);
+        },
+
+        //the second method is just some method that we thought might be useful for this message.  We think that in the future we will need to be able to alert the message on our model and want to be able to call this function, so we define it on the model.  
+        alertThisMessage: function(){
+          //note the object within any model is a spot you will frequently be storing information about a model in.
+          alert(this.get('message'));
+        }
+      });
+      //how would you call the second method?  Give it a shot.  Check out the answer below (answer 2.)
+
+
+      //now to give it a whirl, we 'instantiate' an instance of the class we have defined above:
+      var myNewMessage = new Message();
+
+      //and then we make a change on that model
+      myNewMessage.set({message: 'someMessage'});
+
+
+      //so far we have created models by extending Backbone.Model and we have gone over event listeners for models.  We have also touched on some of the usefulness of understanding what prototypes are, how they work, and their relation to .extend.  Finally, we have touched on creating a template for a given model (in this case a message).  However, doing it as a method can take a long time, and get a bit messy, so in the next section, we will look into how Backbone deals with these 'templates'.  The templating, as well as a bunch of other useful methods are wrapped up into Backbone.View.
+  	</script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+  Answers:
+  1. "<div class='message'>" +
+       "<span>" + message + "</span>" +
+     "</div>" +
+     "<br/>";
+
+     You could do it this way and then in your stylesheet you could add css to it, you could also do it inline, as below:
+
+     "<div style='margin-left:auto; margin-right:auto;'>" +
+       "<span>" + message + "</span>" +
+     "</div>" +
+     "<br/>";
+
+     Inline styles are usually not recommended and are seen as not a best practice.  
+  2. myNewMessage.alertThisMessage();
+
+-->
